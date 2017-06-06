@@ -1,0 +1,2 @@
+<%= erb :partial_news_form, :locals => { :news => nil } %>
+<p>Submitting news is simpler using the <a href="javascript:window.location=%22<%= SiteUrl %>/submit?u=%22+encodeURIComponent(document.location)+%22&t=%22+encodeURIComponent(document.title)">bookmarklet</a> (drag the link to your browser toolbar)</p>

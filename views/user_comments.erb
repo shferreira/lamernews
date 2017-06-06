@@ -1,0 +1,8 @@
+<div id="comments">
+<% @items.each do |item| %>
+  <%= erb :partial_comment, :locals => { :c => item, :u => get_user_by_id(item["user_id"]) || DeletedUser } %>
+<% end %>
+<% if params[:start].to_i + UserCommentsPerPage < @count %>
+<a href="/usercomments/<%= CGI.escapeHTML @user['username'] %>/<%= (params[:start].to_i + UserCommentsPerPage) %>" class="more">[more]</a>
+<% end %>
+</div>

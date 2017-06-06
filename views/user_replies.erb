@@ -1,0 +1,11 @@
+<div id="comments">
+<% @comments.each do |comment| %>
+  <div class="singlecomment">
+    <%= erb :partial_comment, :locals => { :c => comment, :u => get_user_by_id(comment["user_id"]) || DeletedUser } %>
+  </div>
+  <div class="commentreplies">
+    <h2>Replies</h2>
+    <%= erb :partial_comments, :locals => { :news_id => comment['thread_id'], :root => comment["id"].to_i } %>
+  </div>
+<% end %>
+</div>

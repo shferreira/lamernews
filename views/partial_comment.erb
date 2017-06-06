@@ -1,0 +1,51 @@
+<%
+score = compute_comment_score(c)
+news_id = c['thread_id']
+%>
+
+<% if c['del'] and c['del'].to_i == 1 %>
+  <article style="margin-left: <%= c['level'].to_i*CommentReplyShift %>px" class="comment deleted">[comment deleted]</article>
+<% end %>
+
+<%
+show_edit_link = !c['topcomment'] && ($user && ($user['id'].to_i == c['user_id'].to_i)) && (c['ctime'].to_i > (Time.now.to_i - CommentEditTime))
+comment_id = "#{news_id}-#{c['id']}"
+%>
+
+<article class="comment" style="margin-left: <%= c['level'].to_i*CommentReplyShift %>px" data-comment-id="<%= comment_id %>" id="<%= comment_id %>">
+  <span class="avatar">
+    <img src="http://gravatar.com/avatar/<%= Digest::MD5.hexdigest(u["email"] || "") %>?s=48&d=mm">
+  </span>
+  <span class="info">
+    <span class="username">
+      <a href="/user/<%= CGI.escape u["username"] %>"><%= CGI.escape u["username"] %></a>
+    </span>
+    <%= str_elapsed(c["ctime"].to_i) %>.
+    <% if !c['topcomment'] %>
+      <a href="/comment/<%= news_id %>/<%= c["id"] %>" class="reply">link</a>
+    <% end %>
+    <% if $user and !c["topcomment"] %>
+      <a href="/reply/<%= news_id %>/<%= c["id"] %>" class="reply">reply</a>
+    <% end %>
+    <%=
+    if !c['topcomment']
+      upclass = "uparrow"
+      downclass = "downarrow"
+      if $user and c['up'] and c['up'].index($user['id'].to_i)
+          upclass << " voted"
+          downclass << " disabled"
+      elsif $user and c['down'] and c['down'].index($user['id'].to_i)
+          downclass << " voted"
+          upclass << " disabled"
+      end
+      "#{score} points <a href=\"#up\" class=\"" + upclass + "\">&#9650;</a>" +
+      "#{score} points <a href=\"#up\" class=\"" + downclass + "\">&#9660;</a>"
+    end
+    %>
+    <% if show_edit_link %>
+    <a href="/editcomment/<%= news_id %>/<%= c["id"] %>" class="reply">edit</a>
+    (<%= (CommentEditTime - (Time.now.to_i-c['ctime'].to_i))/60 %> minutes left)
+    <% end %>
+  </span>
+  <pre><%= urls_to_links CGI.escapeHTML(c["body"].strip) %></pre>
+</article>

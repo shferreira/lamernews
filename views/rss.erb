@@ -1,0 +1,19 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title><%= SiteName %></title>
+    <link><%= request.env['rack.url_scheme'] + '://' + request.env['HTTP_HOST'] %></link>
+    <description>Description pending</description>
+    <% get_latest_news.first.each do |news|
+        news = {}.merge(news) # Copy the object so we can modify it as we wish.
+        news["ln_url"] = "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}/news/#{news["id"]}"
+        news["url"] = news["ln_url"] unless news["url"][/^text/]
+      %>  <item>
+        <title><%= CGI.escapeHTML news["title"] %></title>
+        <guid><%= CGI.escapeHTML news["url"] %></guid>
+        <link><%= CGI.escapeHTML news["url"] %></link>
+        <description><![CDATA[<a href="<%= news["ln_url"] %>">Comments</a>]]></description>
+        <comments><%= CGI.escapeHTML "#{request.env['rack.url_scheme']}://#{request.env['HTTP_HOST']}/news/#{news["id"]}" %></comments>
+      </item> 
+    <% end %>
+  </channel>
+</rss>

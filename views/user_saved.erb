@@ -1,0 +1,8 @@
+<section id="newslist">
+<% @items.each do |item| %>
+  <%= erb :partial_news, :locals => { :news => item } %>
+<% end %>
+<% if params[:start].to_i + SavedNewsPerPage < @count %>
+<a href="/saved/<%= (params[:start].to_i + SavedNewsPerPage) %>" class="more">[more]</a>
+<% end %>
+</div>

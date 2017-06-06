@@ -1,0 +1,29 @@
+<div class="userinfo">
+  <span class="avatar">
+    <img src="http://gravatar.com/avatar/<%= Digest::MD5.hexdigest(@user["email"] || "") %>?s=48&d=mm">
+  </span>
+  <h2><%= CGI.escapeHTML @user['username'] %></h2>
+  <pre><%= CGI.escapeHTML @user['about'] %></pre>
+  <ul>
+    <li><b>created</b> <%= (Time.now.to_i-@user['ctime'].to_i)/(3600*24) %> days ago</li>
+    <li><b>karma</b> <%= @user['karma'] %> points</li>
+    <li><b>posted news</b> <%= @posted_news %></li>
+    <li><b>posted comments</b> <%= @posted_comments %></li>
+    <% if @owner %>
+    <li><a href="/saved/0">saved news</a></li>
+    <% end %>
+    <li><a href="/usercomments/<%= CGI.escapeHTML @user['username'] %>/0">user comments</a>
+  </ul>
+</div>
+<% if @owner %>
+<form name="f">
+  <label for="email">email (not visible, used for gravatar)</label><br>
+  <input type="text" id="email" name="email" size="40" value="<%= CGI.escapeHTML @user['email'] %>"><br>
+  <label for="password">change password (optional)</label><br>
+  <input type="password" id="password" name="password" size="40"><br>
+  <label for="about">about</label><br>
+  <textarea id="about" name="about" cols="60" rows="10"><%= CGI.escapeHTML @user["about"] %></textarea><br>
+  <input type="button" name="update_profile" value="Update profile">
+</form>
+<div id="errormsg"></div>
+<% end %>

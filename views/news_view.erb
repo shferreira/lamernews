@@ -1,0 +1,12 @@
+<section id="newslist">
+  <%= erb :partial_news, :locals => { :news => @news } %>
+</section>
+<% if @news['url'][/^text:/] %>
+  <topcomment>
+    <%= erb :partial_comment, :locals => { :c => @comment, :u => @user } %>
+  </topcomment>
+<% end %>
+<% if $user %>
+  <%= erb :partial_comment_form, :locals => { :news_id => @news["id"], :comment_id => -1, :body => '', :parent_id => -1 } %>
+<% end %>
+<%= erb :partial_comments, :locals => { :news_id => @news['id'], :root => -1 } %>

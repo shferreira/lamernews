@@ -1,0 +1,3 @@
+<%= erb :partial_news, :locals => { :news => @news } %>
+<%= erb :partial_comment, :locals => { :c => @comment, :u => @user } %>
+<%= erb :partial_comment_form, :locals => { :news_id => @news["id"], :comment_id => -1, :body => '', :parent_id => params["comment_id"] } %>

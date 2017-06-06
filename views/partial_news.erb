@@ -1,0 +1,44 @@
+<% if news["del"] %>
+<article class="deleted">[deleted news]</article>
+<% end %>
+
+<%
+domain = news_domain(news)
+news = {}.merge(news) # Copy the object so we can modify it as we wish.
+news["url"] = "/news/#{news["id"]}" if !domain
+upclass = "uparrow"
+downclass = "downarrow"
+if news["voted"] == :up
+    upclass << " voted"
+    downclass << " disabled"
+elsif news["voted"] == :down
+    downclass << " voted"
+    upclass << " disabled"
+end
+%>
+
+<article data-news-id="<%= news["id"] %>">
+  <a href="#up" class="<%= upclass %>">&#9650;</a>
+  <h2><a href="<%= news["url"] %>"><%= CGI.escapeHTML news["title"] %></a></h2>
+  <address>
+    <%= "at " + CGI.escapeHTML(domain) if domain %>
+    <% if $user and $user['id'].to_i == news['user_id'].to_i and news['ctime'].to_i > (Time.now.to_i - NewsEditTime) %>
+    <a href="/editnews/<%= news["id"] %>">[edit]</a>
+    <% end %>
+  </address>
+  <a href="#down" class="<%= downclass %>">&#9660;</a>
+  <p>
+    <%= news["up"] %> up and <%= news["down"] %> down, posted by
+    <username>
+      <a href="/user/<%= CGI.escape news["username"] %>"><%= CGI.escape news["username"] %></a>
+    </username>
+    <%= str_elapsed(news["ctime"].to_i) %>
+    <a href="/news/<%= news["id"] %>"><%= news["comments"] %> comments</a>
+  </p>
+  <%=
+    if params and params[:debug] and $user and user_is_admin?($user)
+      "score: "+news["score"].to_s+" "+
+      "rank: "+compute_news_rank(news).to_s
+    end
+  %>
+</article>

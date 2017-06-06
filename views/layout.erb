@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title><%= @title %> - <%= SiteName %></title>
+    <meta content="nofollow" name="robots">
+    <link href="/css/style.css?v=8" rel="stylesheet" type="text/css">
+    <link href="/images/favicon.png" rel="shortcut icon">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="/js/app.js?v=8"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>
+          <a href="/"><%= CGI.escapeHTML SiteName %></a>
+          <small><%= Version %></small>
+        </h1>
+        <nav>
+          <a href="/">top</a>
+          <a href="/latest/0">latest</a>
+          <a href="/submit">submit</a>
+          <% if $user %>
+            <a href="/replies" class="replies">
+              replies
+              <% count = $user['replies'] || 0 %>
+              <% if count.to_i > 0 %>
+                <sup><%= count %></sup>
+              <% end %>
+            </a>
+          <% end %>
+        </nav>
+        <nav id="account">
+        <% if $user %>
+          <a href="/user/<%= $user['username'] %>">
+            <%= $user['username'] %> (<%= $user['karma'] %>)
+          </a> |
+          <a href="/logout?apisecret=<%= $user['apisecret'] %>">
+            logout
+          </a>
+        <% else %>
+          <a href="/login">login / register</a>
+        <% end %>
+        </nav>
+      </header>
+      <div id="content">
+        <% if @title %><h2><%= @title %></h2><% end %>
+        <%= yield %>
+      </div>
+    <footer>
+      <a href="http://github.com/antirez/lamernews">source code</a> |
+      <a href="/rss">rss feed</a> |
+      <a href="<%= FooterTwitterLink %>">twitter</a> |
+      <a href="<%= FooterGoogleGroupLink %>">google group</a> |
+    </footer>
+    <% if $user %>
+    <script>var apisecret = '<%= $user['apisecret'] %>';</script>
+    <% end %>
+    <% if KeyboardNavigation == 1 %>
+    <script>setKeyboardNavigation();</script>
+    <% end %>
+    </div>
+  </body>
+</html>

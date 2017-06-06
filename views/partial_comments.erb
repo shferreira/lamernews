@@ -1,0 +1,5 @@
+<div id="comments">
+<% Comments.render_comments(news_id,root) do |item| %>
+  <%= erb(:partial_comment, :locals => { :c => item, :u => get_user_by_id(item["user_id"]) || DeletedUser }) %>
+<% end %>
+</div>

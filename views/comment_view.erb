@@ -1,0 +1,10 @@
+<section id="newslist">
+  <%= erb :partial_news, :locals => { :news => @news } %>
+</section>
+<div class="singlecomment">
+  <%= erb :partial_comment, :locals => { :c => @comment, :u => @user } %>
+</div>
+<div class="commentreplies">
+  <h2>Replies</h2>
+  <%= erb :partial_comments, :locals => { :news_id => @comment['thread_id'], :root => @comment["id"].to_i } %>
+</div>

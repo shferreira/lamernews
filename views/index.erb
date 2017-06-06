@@ -1,0 +1,5 @@
+<section id="newslist">
+<% @news.each do |news| %>
+  <%= erb :partial_news, :locals => { :news => news } %>
+<% end %>
+</section>

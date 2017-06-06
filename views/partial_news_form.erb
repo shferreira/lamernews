@@ -1,0 +1,17 @@
+<div id="submitform">
+  <form name="f">
+    <input type="hidden" name="news_id" value="<%= (news['id'] if news) || -1 %>">
+    <label for="title">title</label><br>
+    <input type="text" id="title" name="title" size="80" value="<%= CGI::escapeHTML(news['title']) if news %>"><br>
+    <label for="url">url</label><br>
+    <input type="text" id="url" name="url" size="60" value="<%= CGI::escapeHTML(news['url']) if news and news['url'][/^http/] %>"><br>
+    or if you don't have an url type some text
+    <label for="text">text</label>
+    <textarea id="text" name="text" cols="60" rows="10"><%= CGI.escapeHTML(news_text(news) || "") if news  %></textarea><br>
+    <% if news %>
+    <input type="checkbox" name="del" id="del" value="1"><label for="del">delete this news</label><br>
+    <% end %>
+    <input type="button" name="do_submit" value="Edit"> 
+  </form>
+</div>
+<div id="errormsg"></div>
